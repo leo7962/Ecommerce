@@ -6,7 +6,8 @@ namespace Ecommerce.Server.Entities
     {
         [Key] public int Id { get; set; }
         public required string Name { get; set; }
+        public string Description { get; set; }
         public decimal Price { get; set; }
-        public List<CategoryProduct> CategoryProducts { get; set; }
+        public virtual ICollection<CategoryProduct> CategoryProducts { get; set; }
     }
 }

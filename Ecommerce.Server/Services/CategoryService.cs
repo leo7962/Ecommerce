@@ -37,13 +37,19 @@ namespace Ecommerce.Server.Services
 
         public async Task<IEnumerable<CategoryDTO>> GetAllCategoriesAsync()
         {
-            var categories = await context.Categories.ToListAsync();
+            var categories = await context.Categories
+                .Include(p => p.categoryProducts)
+                .ThenInclude(cp => cp.Product)
+                .ToListAsync();
             return mapper.Map<IEnumerable<CategoryDTO>>(categories);
         }
 
         public async Task<CategoryDTO> GetCategoryByIdAsync(int id)
         {
-            var category = await context.Products.FindAsync(id);
+            var category = await context.Categories
+                .Include(p =>p.categoryProducts)
+                .ThenInclude(cp => cp.Product)
+                .FirstOrDefaultAsync(p => p.Id == id);
             return mapper.Map<CategoryDTO>(category);
         }
 

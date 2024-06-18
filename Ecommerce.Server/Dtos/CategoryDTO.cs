@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public required List<ProductDTO> Products { get; set; }
+        public required List<int> IdProducts { get; set; }
     }
 }

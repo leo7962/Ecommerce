@@ -6,6 +6,6 @@ namespace Ecommerce.Server.Entities
     {
         [Key] public int Id { get; set; }
         public required string Name { get; set; }
-        public required List<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

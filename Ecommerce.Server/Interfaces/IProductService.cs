@@ -9,5 +9,6 @@ namespace Ecommerce.Server.Interfaces
         Task<ProductDTO> CreateProductAsync(ProductDTO productDto);
         Task UpdateProductAsync(ProductDTO productDto);
         Task DeleteProductAsync(int id);
+        Task<bool> AddCategoryToProductAsync(int IdProduct, int IdCategory);
     }
 }

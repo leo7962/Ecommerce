@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Ecommerce.Server.Dtos;
-using Ecommerce.Server.Entities;
 using Ecommerce.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,6 +60,17 @@ namespace Ecommerce.Server.Controllers
         {
             await productService.DeleteProductAsync(id);
             return NoContent();
+        }
+
+        [HttpPost("{IdProduct}/categories/{IdCategory}")]
+        public async Task<IActionResult> AddCategoryToProduct(int IdProduct, int IdCategory)
+        {
+            var result = await productService.AddCategoryToProductAsync(IdProduct, IdCategory);
+            if (result)
+            {
+                return Ok();
+            }
+            return NotFound();
         }
     }
 }

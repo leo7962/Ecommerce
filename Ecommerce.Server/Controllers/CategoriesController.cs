@@ -40,7 +40,25 @@ namespace Ecommerce.Server.Controllers
         public async Task<ActionResult<CategoryDTO>> PostCategory(CategoryDTO categoryDTO)
         {
             var categoryCreated = await categoryService.CreateCategoryAsync(categoryDTO);
-            return CreatedAtAction(nameof(GetCategory), new {id = categoryDTO.Id}, categoryCreated);
+            return CreatedAtAction(nameof(GetCategory), new { id = categoryDTO.Id }, categoryCreated);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProduct(int id, CategoryDTO categoryDTO)
+        {
+            if (id != categoryDTO.Id)
+            {
+                return BadRequest();
+            }
+            await categoryService.UpdateCategoryAsync(categoryDTO);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            await categoryService.DeleteCategoryAsync(id);
+            return NoContent();
         }
     }
 }

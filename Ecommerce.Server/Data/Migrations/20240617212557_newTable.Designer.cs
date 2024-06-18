@@ -3,6 +3,7 @@ using Ecommerce.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Server.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240617212557_newTable")]
+    partial class newTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +38,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>
@@ -50,7 +53,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasIndex("IdProduct");
 
-                    b.ToTable("CategoryProducts", (string)null);
+                    b.ToTable("CategoryProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Customer", b =>
@@ -67,7 +70,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.DetailOrder", b =>
@@ -93,7 +96,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasIndex("IdProduct");
 
-                    b.ToTable("DetailOrder", (string)null);
+                    b.ToTable("DetailOrder");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
@@ -111,7 +114,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasIndex("IdCustomer");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Product", b =>
@@ -136,7 +139,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>

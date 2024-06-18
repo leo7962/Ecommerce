@@ -23,9 +23,15 @@ namespace Ecommerce.Server.Data
 
             modelBuilder.Entity<CategoryProduct>().HasKey(cp => new { cp.IdCategory, cp.IdProduct });
 
-            //modelBuilder.Entity<CategoryProduct>().HasOne(cp => cp.Product).WithMany(p => p.CategoriesProducts).HasForeignKey(cp => cp.IdProduct);
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.CategoryProducts)
+                .WithOne(cp => cp.Product)
+                .HasForeignKey(cp => cp.IdProduct);
 
-            //modelBuilder.Entity<CategoryProduct>().HasOne(cp => cp.Category).WithMany(c => c.CategoriesProducts).HasForeignKey(cp => cp.IdCategory);
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.categoryProducts)
+                .WithOne(cp => cp.Category)
+                .HasForeignKey(cp => cp.IdCategory);
         }
     }
 }
