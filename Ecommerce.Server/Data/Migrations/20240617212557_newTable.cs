@@ -129,7 +129,7 @@ namespace Ecommerce.Server.Data.Migrations
                 name: "FK_Orders_Customers_IdCustomer",
                 table: "Orders",
                 column: "IdCustomer",
-                principalTable: "Customers",
+                principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -225,7 +225,7 @@ namespace Ecommerce.Server.Data.Migrations
                 name: "FK_Orders_Customers_CustomerId",
                 table: "Orders",
                 column: "CustomerId",
-                principalTable: "Customers",
+                principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 

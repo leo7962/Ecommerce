@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Ecommerce.Server.Dtos;
+﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +9,10 @@ namespace Ecommerce.Server.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService categoryService;
-        private readonly IMapper mapper;
 
-        public CategoriesController(ICategoryService categoryService, IMapper mapper)
+        public CategoriesController(ICategoryService categoryService)
         {
             this.categoryService = categoryService;
-            this.mapper = mapper;
         }
 
         [HttpGet]

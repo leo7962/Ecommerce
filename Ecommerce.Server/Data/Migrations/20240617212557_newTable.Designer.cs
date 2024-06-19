@@ -56,7 +56,7 @@ namespace Ecommerce.Server.Data.Migrations
                     b.ToTable("CategoryProducts");
                 });
 
-            modelBuilder.Entity("Ecommerce.Server.Entities.Customer", b =>
+            modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.DetailOrder", b =>
@@ -182,13 +182,13 @@ namespace Ecommerce.Server.Data.Migrations
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
                 {
-                    b.HasOne("Ecommerce.Server.Entities.Customer", "Customer")
+                    b.HasOne("Ecommerce.Server.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("IdCustomer")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Category", b =>
@@ -196,7 +196,7 @@ namespace Ecommerce.Server.Data.Migrations
                     b.Navigation("categoryProducts");
                 });
 
-            modelBuilder.Entity("Ecommerce.Server.Entities.Customer", b =>
+            modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>
                 {
                     b.Navigation("Orders");
                 });

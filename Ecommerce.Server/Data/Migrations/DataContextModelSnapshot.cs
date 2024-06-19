@@ -53,23 +53,6 @@ namespace Ecommerce.Server.Data.Migrations
                     b.ToTable("CategoryProducts", (string)null);
                 });
 
-            modelBuilder.Entity("Ecommerce.Server.Entities.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers", (string)null);
-                });
-
             modelBuilder.Entity("Ecommerce.Server.Entities.DetailOrder", b =>
                 {
                     b.Property<int>("Id")
@@ -139,6 +122,35 @@ namespace Ecommerce.Server.Data.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
+            modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>
                 {
                     b.HasOne("Ecommerce.Server.Entities.Category", "Category")
@@ -179,23 +191,18 @@ namespace Ecommerce.Server.Data.Migrations
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
                 {
-                    b.HasOne("Ecommerce.Server.Entities.Customer", "Customer")
+                    b.HasOne("Ecommerce.Server.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("IdCustomer")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Category", b =>
                 {
                     b.Navigation("categoryProducts");
-                });
-
-            modelBuilder.Entity("Ecommerce.Server.Entities.Customer", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
@@ -206,6 +213,11 @@ namespace Ecommerce.Server.Data.Migrations
             modelBuilder.Entity("Ecommerce.Server.Entities.Product", b =>
                 {
                     b.Navigation("CategoryProducts");
+                });
+
+            modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

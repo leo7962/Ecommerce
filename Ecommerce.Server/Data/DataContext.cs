@@ -11,9 +11,9 @@ namespace Ecommerce.Server.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<CategoryProduct> CategoryProducts { get; set; }
+        public DbSet<CategoryProduct> CategoryProducts { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace Ecommerce.Server.Data
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.categoryProducts)
                 .WithOne(cp => cp.Category)
-                .HasForeignKey(cp => cp.IdCategory);
+                .HasForeignKey(cp => cp.IdCategory);           
         }
     }
 }

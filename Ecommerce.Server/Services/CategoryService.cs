@@ -47,7 +47,7 @@ namespace Ecommerce.Server.Services
         public async Task<CategoryDTO> GetCategoryByIdAsync(int id)
         {
             var category = await context.Categories
-                .Include(p =>p.categoryProducts)
+                .Include(p => p.categoryProducts)
                 .ThenInclude(cp => cp.Product)
                 .FirstOrDefaultAsync(p => p.Id == id);
             return mapper.Map<CategoryDTO>(category);
