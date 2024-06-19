@@ -5,82 +5,78 @@ using Ecommerce.Server.Entities;
 using Ecommerce.Server.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ecommerce.Server.Services
+namespace Ecommerce.Server.Services;
+
+public class ProductService : IProductService
 {
-    public class ProductService : IProductService
+    private readonly DataContext context;
+    private readonly IMapper mapper;
+
+    public ProductService(DataContext context, IMapper mapper)
     {
-        private readonly DataContext context;
-        private readonly IMapper mapper;
+        this.context = context;
+        this.mapper = mapper;
+    }
 
-        public ProductService(DataContext context, IMapper mapper)
+    public async Task<bool> AddCategoryToProductAsync(int IdProduct, int IdCategory)
+    {
+        var product = await context.Products.FindAsync(IdProduct);
+        var category = await context.Categories.FindAsync(IdCategory);
+
+        if (product == null || category == null) return false;
+
+        var categoryProduct = new CategoryProduct
         {
-            this.context = context;
-            this.mapper = mapper;
-        }
+            IdProduct = IdProduct,
+            IdCategory = IdCategory
+        };
 
-        public async Task<bool> AddCategoryToProductAsync(int IdProduct, int IdCategory)
+        context.CategoryProducts.Add(categoryProduct);
+
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<ProductDTO> CreateProductAsync(ProductDTO productDto)
+    {
+        var product = mapper.Map<Product>(productDto);
+        await context.Products.AddAsync(product);
+        await context.SaveChangesAsync();
+        return mapper.Map<ProductDTO>(product);
+    }
+
+    public async Task DeleteProductAsync(int id)
+    {
+        var product = await context.Products.FindAsync(id);
+        if (product == null)
         {
-            var product = await context.Products.FindAsync(IdProduct);
-            var category = await context.Categories.FindAsync(IdCategory);
-
-            if (product == null || category == null)
-            {
-                return false;
-            }
-
-            var categoryProduct = new CategoryProduct
-            {
-                IdProduct = IdProduct,
-                IdCategory = IdCategory
-            };
-
-            context.CategoryProducts.Add(categoryProduct);
-
-            await context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<ProductDTO> CreateProductAsync(ProductDTO productDto)
-        {
-            var product = mapper.Map<Product>(productDto);
-            await context.Products.AddAsync(product);
-            await context.SaveChangesAsync();
-            return mapper.Map<ProductDTO>(product);
-        }
-
-        public async Task DeleteProductAsync(int id)
-        {
-            var product = await context.Products.FindAsync(id);
-            if (product == null)
-            {
-                context.Products.Remove(product);
-                await context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<IEnumerable<ProductDTO>> GetAllProductAsync()
-        {
-            var products = await context.Products
-                .Include(p => p.CategoryProducts)
-                .ThenInclude(cp => cp.Category)
-                .ToListAsync();
-            return mapper.Map<IEnumerable<ProductDTO>>(products);
-        }
-
-        public async Task<ProductDTO> GetProductByIdAsync(int id)
-        {
-            var product = await context.Products
-                .Include(p => p.CategoryProducts)
-                .ThenInclude(cp => cp.Category)
-                .FirstOrDefaultAsync(p => p.Id == id);
-            return mapper.Map<ProductDTO>(product);
-        }
-
-        public async Task UpdateProductAsync(ProductDTO productDto)
-        {
-            var product = mapper.Map<Product>(productDto);
-            context.Products.Update(product);
+            context.Products.Remove(product);
             await context.SaveChangesAsync();
         }
+    }
+
+    public async Task<IEnumerable<ProductDTO>> GetAllProductAsync()
+    {
+        var products = await context.Products
+            .Include(p => p.CategoryProducts)
+            .ThenInclude(cp => cp.Category)
+            .ToListAsync();
+        return mapper.Map<IEnumerable<ProductDTO>>(products);
+    }
+
+    public async Task<ProductDTO> GetProductByIdAsync(int id)
+    {
+        var product = await context.Products
+            .Include(p => p.CategoryProducts)
+            .ThenInclude(cp => cp.Category)
+            .FirstOrDefaultAsync(p => p.Id == id);
+        return mapper.Map<ProductDTO>(product);
+    }
+
+    public async Task UpdateProductAsync(ProductDTO productDto)
+    {
+        var product = mapper.Map<Product>(productDto);
+        context.Products.Update(product);
+        await context.SaveChangesAsync();
     }
 }

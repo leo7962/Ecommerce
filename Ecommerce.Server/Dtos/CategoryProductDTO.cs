@@ -1,8 +1,7 @@
-﻿namespace Ecommerce.Server.Dtos
+﻿namespace Ecommerce.Server.Dtos;
+
+public class CategoryProductDTO
 {
-    public class CategoryProductDTO
-    {
-        public int IdProduct { get; set; }
-        public int IdCategory { get; set; }
-    }
+    public int IdProduct { get; set; }
+    public int IdCategory { get; set; }
 }
