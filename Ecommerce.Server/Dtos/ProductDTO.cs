@@ -6,5 +6,5 @@ public class ProductDTO
     public required string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public List<CategoryDTO> Categories { get; set; }
+    public List<CategoryDTO> Categories { get; set; }    
 }

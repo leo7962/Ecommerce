@@ -10,24 +10,26 @@ public class MappingProfile : Profile
     {
         //Mapping of Product
         CreateMap<Product, ProductDTO>()
-            .ForMember(dto => dto.IdProduct, opt => opt.MapFrom(src => src.IdProduct));
+            .ForMember(dto => dto.IdProduct, opt => opt.MapFrom(src => src.IdProduct))
+            .ForMember(dto => dto.Categories, opt => opt.MapFrom(src => src.CategoryProducts.Select(cp => cp.Category)))
+            .ReverseMap();
 
         //Mapping of Category
-        CreateMap<Category, CategoryDTO>();
+        CreateMap<Category, CategoryDTO>().ReverseMap();
 
         //Mapping order
         CreateMap<Order, OrderDTO>()
             .ForMember(dto => dto.Products,
-                opt => opt.MapFrom(src => src.OrderProducts.Select(op => new { op.IdProduct, op.Quantity })));
+                opt => opt.MapFrom(src => src.OrderProducts.Select(op => new { op.IdProduct, op.Quantity }))).ReverseMap();
 
         //Mapping order to orderProduct
         CreateMap<OrderProduct, OrderProductDTO>()
             .ForMember(dto => dto.IdProduct, opt => opt.MapFrom(src => src.IdProduct))
-            .ForMember(dto => dto.Quantity, opt => opt.MapFrom(src => src.Quantity));
+            .ForMember(dto => dto.Quantity, opt => opt.MapFrom(src => src.Quantity)).ReverseMap();
 
         //Mapping User
 
         CreateMap<User, UserDTO>()
-            .ForMember(dto => dto.IdOrders, opt => opt.MapFrom(src => src.Orders.Select(o => o.IdOrder)));
+            .ForMember(dto => dto.IdOrders, opt => opt.MapFrom(src => src.Orders.Select(o => o.IdOrder))).ReverseMap();
     }
 }

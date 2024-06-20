@@ -2,6 +2,7 @@
 using Ecommerce.Server.Data;
 using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Entities;
+using Ecommerce.Server.Helpers;
 using Ecommerce.Server.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,17 +43,18 @@ public class ProductService : IProductService
         try
         {
             var product = mapper.Map<Product>(productDto);
+
             await context.Products.AddAsync(product);
             await context.SaveChangesAsync();
             return mapper.Map<ProductDTO>(product);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
-            throw new Exception("An error occurred while saving the product in the database.");
+            throw new Exception("An error occurred while saving the product in the database." + " " + ex.Message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw new Exception("An unexpected error has occurred.");
+            throw new Exception("An unexpected error has occurred." + " " + ex.Message);
         }
     }
 
@@ -66,15 +68,21 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetAllProductAsync()
+    public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(int pageNumber, int pageSize)
     {
+        var count = await context.Products.CountAsync();
+
         var products = await context.Products
             .Include(p => p.CategoryProducts)
             .ThenInclude(cp => cp.Category)
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Order)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
-        return mapper.Map<IEnumerable<ProductDTO>>(products);
+
+        var productsDto = mapper.Map<IEnumerable<ProductDTO>>(products);
+        return new PaginatedList<ProductDTO>(productsDto.ToList(), count, pageNumber, pageSize);
     }
 
     public async Task<ProductDTO> GetProductByIdAsync(int id)

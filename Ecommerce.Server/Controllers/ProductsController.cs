@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Controllers;
 
@@ -16,10 +17,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
+    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(int pageNumber = 1, int pageSize = 10)
     {
-        var products = await productService.GetAllProductAsync();
-
+        var products = await productService.GetAllProductAsync(pageNumber, pageSize);
         return Ok(products);
     }
 
@@ -33,8 +33,20 @@ public class ProductsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProductDTO>> PostProduct(ProductDTO product)
     {
-        var productCreated = await productService.CreateProductAsync(product);
-        return CreatedAtAction(nameof(GetProduct), new { id = productCreated.IdProduct }, productCreated);
+        try
+        {
+            var productCreated = await productService.CreateProductAsync(product);
+            return CreatedAtAction(nameof(GetProduct), new { id = productCreated.IdProduct }, productCreated);
+        }
+        catch (DbUpdateException ex)
+        {
+
+            return StatusCode(500, "An error occurred while saving the product in the database." + " " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An unexpected error has occurred." + " " + ex.Message);
+        }
     }
 
     [HttpPut("{id}")]

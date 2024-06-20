@@ -38,13 +38,13 @@ public class OrdersController : ControllerBase
             var ordercreated = await orderService.CreateOrUpdateOrderAsync(orderDTO);
             return CreatedAtAction(nameof(GetOrder), new { id = ordercreated.IdOrder }, ordercreated);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
-            return StatusCode(500, "An error occurred while processing your request.");
+            return StatusCode(500, "An error occurred while saving the product in the database." + " " + ex.Message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500, "An error occurred while processing your request.");
+            return StatusCode(500, "An unexpected error has occurred." + " " + ex.Message);
         }
     }
 

@@ -1,10 +1,11 @@
 ﻿using Ecommerce.Server.Dtos;
+using Ecommerce.Server.Helpers;
 
 namespace Ecommerce.Server.Interfaces;
 
 public interface IProductService
 {
-    Task<IEnumerable<ProductDTO>> GetAllProductAsync();
+    Task<PaginatedList<ProductDTO>> GetAllProductAsync(int pageNumber, int pageSize);
     Task<ProductDTO> GetProductByIdAsync(int id);
     Task<ProductDTO> CreateProductAsync(ProductDTO productDto);
     Task UpdateProductAsync(ProductDTO productDto);

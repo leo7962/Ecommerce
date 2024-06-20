@@ -35,7 +35,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("IdCategory");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>
@@ -52,7 +52,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasIndex("IdProduct");
 
-                    b.ToTable("CategoryProducts");
+                    b.ToTable("CategoryProducts", (string)null);
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
@@ -70,7 +70,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.OrderProduct", b =>
@@ -90,7 +90,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasIndex("IdOrder");
 
-                    b.ToTable("OrderProducts");
+                    b.ToTable("OrderProducts", (string)null);
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Product", b =>
@@ -114,7 +114,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("IdProduct");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>
@@ -143,7 +143,7 @@ namespace Ecommerce.Server.Data.Migrations
 
                     b.HasKey("IdUser");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>
