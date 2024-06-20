@@ -42,7 +42,7 @@ public class CategoryService : ICategoryService
             .Select(c => new CategoryDTO
             {
                 IdCategory = c.IdCategory,
-                Name = c.Name             
+                Name = c.Name
             }).ToListAsync();
 
         return mapper.Map<IEnumerable<CategoryDTO>>(categories);
@@ -55,7 +55,7 @@ public class CategoryService : ICategoryService
             .Select(c => new CategoryDTO
             {
                 IdCategory = c.IdCategory,
-                Name= c.Name                
+                Name = c.Name
             }).FirstOrDefaultAsync();
 
         return mapper.Map<CategoryDTO>(category);

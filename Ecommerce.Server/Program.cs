@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json.Serialization;
 using Ecommerce.Server.Data;
 using Ecommerce.Server.Helpers;
 using Ecommerce.Server.Interfaces;
@@ -5,8 +7,6 @@ using Ecommerce.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

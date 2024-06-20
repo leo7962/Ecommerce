@@ -1,6 +1,4 @@
-﻿using Ecommerce.Server.Entities;
-
-namespace Ecommerce.Server.Dtos;
+﻿namespace Ecommerce.Server.Dtos;
 
 public class OrderDTO
 {

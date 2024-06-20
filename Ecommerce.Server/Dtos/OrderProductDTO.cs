@@ -1,9 +1,8 @@
-﻿namespace Ecommerce.Server.Dtos
+﻿namespace Ecommerce.Server.Dtos;
+
+public class OrderProductDTO
 {
-    public class OrderProductDTO
-    {
-        public int IdProduct { get; set; }
-        public int OrderId { get; set; }
-        public int Quantity { get; set; }
-    }
+    public int IdProduct { get; set; }
+    public int OrderId { get; set; }
+    public int Quantity { get; set; }
 }

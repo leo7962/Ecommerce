@@ -48,14 +48,12 @@ public class ProductService : IProductService
         }
         catch (DbUpdateException)
         {
-
             throw new Exception("An error occurred while saving the product in the database.");
         }
         catch (Exception)
         {
             throw new Exception("An unexpected error has occurred.");
         }
-
     }
 
     public async Task DeleteProductAsync(int id)
