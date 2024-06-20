@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Ecommerce.Server.Dtos;
+﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +10,7 @@ public class ProductsController : ControllerBase
 {
     private readonly IProductService productService;
 
-    public ProductsController(IProductService productService, IMapper mapper)
+    public ProductsController(IProductService productService)
     {
         this.productService = productService;
     }
@@ -35,13 +34,13 @@ public class ProductsController : ControllerBase
     public async Task<ActionResult<ProductDTO>> PostProduct(ProductDTO product)
     {
         var productCreated = await productService.CreateProductAsync(product);
-        return CreatedAtAction(nameof(GetProduct), new { id = productCreated.Id }, productCreated);
+        return CreatedAtAction(nameof(GetProduct), new { id = productCreated.IdProduct }, productCreated);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutProduct(int id, ProductDTO product)
     {
-        if (id != product.Id) return BadRequest();
+        if (id != product.IdProduct) return BadRequest();
         await productService.UpdateProductAsync(product);
         return NoContent();
     }

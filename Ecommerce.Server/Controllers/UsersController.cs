@@ -22,32 +22,24 @@ public class UsersController : ControllerBase
     [Authorize]
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
     {
-        var customers = await userService.GetAllUsersAsync();
-        return Ok(customers);
+        var users = await userService.GetAllUsersAsync();
+        return Ok(users);
     }
 
     [HttpGet("{id}")]
     [Authorize]
     public async Task<ActionResult<UserDTO>> GetUser(int id)
     {
-        var customer = await userService.GetUserByIdAsync(id);
-        return Ok(customer);
+        var user = await userService.GetUserByIdAsync(id);
+        return Ok(user);
     }
-
-    //[HttpPost]
-    //[Authorize(Roles = "Admin")]
-    //public async Task<ActionResult<UserDTO>> PostUser(UserDTO customerDTO)
-    //{
-    //    var customerCreated = await userService.CreateUserAsync(customerDTO);
-    //    return CreatedAtAction(nameof(GetUser), new { id = customerDTO.Id }, customerCreated);
-    //}
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> PutProduct(int id, UserDTO customerDTO)
+    public async Task<IActionResult> PutProduct(int id, UserDTO userDTO)
     {
-        if (id != customerDTO.Id) return BadRequest();
-        await userService.UpdateUserAsync(customerDTO);
+        if (id != userDTO.Id) return BadRequest();
+        await userService.UpdateUserAsync(userDTO);
         return NoContent();
     }
 

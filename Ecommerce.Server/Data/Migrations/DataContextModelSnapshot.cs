@@ -23,90 +23,85 @@ namespace Ecommerce.Server.Data.Migrations
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdCategory")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategory"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdCategory");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>
                 {
                     b.Property<int>("IdCategory")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.Property<int>("IdProduct")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
                     b.HasKey("IdCategory", "IdProduct");
 
                     b.HasIndex("IdProduct");
 
-                    b.ToTable("CategoryProducts", (string)null);
-                });
-
-            modelBuilder.Entity("Ecommerce.Server.Entities.DetailOrder", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdOrder");
-
-                    b.HasIndex("IdProduct");
-
-                    b.ToTable("DetailOrder", (string)null);
+                    b.ToTable("CategoryProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdOrder")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdOrder"));
 
-                    b.Property<int>("IdCustomer")
+                    b.Property<int>("IdUser")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdOrder");
 
-                    b.HasIndex("IdCustomer");
+                    b.HasIndex("IdUser");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Ecommerce.Server.Entities.OrderProduct", b =>
+                {
+                    b.Property<int>("IdProduct")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("IdOrder")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdProduct", "IdOrder");
+
+                    b.HasIndex("IdOrder");
+
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdProduct")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProduct"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -117,18 +112,18 @@ namespace Ecommerce.Server.Data.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdProduct");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdUser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUser"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -146,15 +141,15 @@ namespace Ecommerce.Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdUser");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.CategoryProduct", b =>
                 {
                     b.HasOne("Ecommerce.Server.Entities.Category", "Category")
-                        .WithMany("categoryProducts")
+                        .WithMany("CategoryProducts")
                         .HasForeignKey("IdCategory")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -170,16 +165,27 @@ namespace Ecommerce.Server.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Ecommerce.Server.Entities.DetailOrder", b =>
+            modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
+                {
+                    b.HasOne("Ecommerce.Server.Entities.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ecommerce.Server.Entities.OrderProduct", b =>
                 {
                     b.HasOne("Ecommerce.Server.Entities.Order", "Order")
-                        .WithMany("DetailOrders")
+                        .WithMany("OrderProducts")
                         .HasForeignKey("IdOrder")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ecommerce.Server.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderProducts")
                         .HasForeignKey("IdProduct")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -189,30 +195,21 @@ namespace Ecommerce.Server.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
-                {
-                    b.HasOne("Ecommerce.Server.Entities.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("IdCustomer")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Ecommerce.Server.Entities.Category", b =>
                 {
-                    b.Navigation("categoryProducts");
+                    b.Navigation("CategoryProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Order", b =>
                 {
-                    b.Navigation("DetailOrders");
+                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.Product", b =>
                 {
                     b.Navigation("CategoryProducts");
+
+                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Server.Entities.User", b =>

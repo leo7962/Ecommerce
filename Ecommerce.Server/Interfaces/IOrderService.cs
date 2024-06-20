@@ -4,9 +4,9 @@ namespace Ecommerce.Server.Interfaces;
 
 public interface IOrderService
 {
-    Task<IEnumerable<DetailOrderDTO>> GetAllOrdersAsync();
+    Task<IEnumerable<OrderDTO>> GetAllOrdersAsync();
     Task<OrderDTO> GetOrderByIdAsync(int id);
-    Task<OrderDTO> CreateOrdedAsyunc(OrderDTO orderDTO);
-    Task UpdateOrderAsync(int id, OrderDTO orderDTO);
+    Task UpdateOrderAsync(OrderDTO orderDTO);
     Task DeleteOrderAsync(int id);
+    Task<OrderDTO> CreateOrUpdateOrderAsync(OrderDTO orderDTO, bool addProducts = false);
 }

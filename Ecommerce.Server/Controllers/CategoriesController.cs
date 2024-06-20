@@ -33,13 +33,13 @@ public class CategoriesController : ControllerBase
     public async Task<ActionResult<CategoryDTO>> PostCategory(CategoryDTO categoryDTO)
     {
         var categoryCreated = await categoryService.CreateCategoryAsync(categoryDTO);
-        return CreatedAtAction(nameof(GetCategory), new { id = categoryDTO.Id }, categoryCreated);
+        return CreatedAtAction(nameof(GetCategory), new { id = categoryDTO.IdCategory }, categoryCreated);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutProduct(int id, CategoryDTO categoryDTO)
     {
-        if (id != categoryDTO.Id) return BadRequest();
+        if (id != categoryDTO.IdCategory) return BadRequest();
         await categoryService.UpdateCategoryAsync(categoryDTO);
         return NoContent();
     }

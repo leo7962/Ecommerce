@@ -5,8 +5,8 @@ namespace Ecommerce.Server.Entities;
 
 public class Order
 {
-    [Key] public int Id { get; set; }
-    [ForeignKey("User")] public int IdCustomer { get; set; }
-    public required User User { get; set; }
-    public virtual ICollection<DetailOrder> DetailOrders { get; set; }
+    [Key] public int IdOrder { get; set; }
+    [ForeignKey("User")] public int IdUser { get; set; }
+    public User User { get; set; }
+    public virtual ICollection<OrderProduct> OrderProducts { get; set; }
 }

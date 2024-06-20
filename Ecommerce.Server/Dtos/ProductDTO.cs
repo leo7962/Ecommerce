@@ -2,9 +2,9 @@
 
 public class ProductDTO
 {
-    public int Id { get; set; }
+    public int IdProduct { get; set; }
     public required string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
-    public List<int> IdCategories { get; set; }
+    public List<CategoryDTO> Categories { get; set; }    
 }

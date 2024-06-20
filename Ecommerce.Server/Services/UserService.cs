@@ -21,7 +21,7 @@ public class UserService : IUserService
     public async Task<UserDTO> CreateUserAsync(UserDTO userDTO)
     {
         var user = mapper.Map<User>(userDTO);
-        user.Password = HashPassword(userDTO.Password);
+        //user.Password = HashPassword(userDTO.Password);
         await context.Users.AddAsync(user);
         await context.SaveChangesAsync();
         return mapper.Map<UserDTO>(userDTO);
@@ -30,9 +30,11 @@ public class UserService : IUserService
     public async Task DeleteUserAsync(int id)
     {
         var user = await context.Users.FindAsync(id);
-
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
+        if (user != null)
+        {
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
+        }
     }
 
     public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()

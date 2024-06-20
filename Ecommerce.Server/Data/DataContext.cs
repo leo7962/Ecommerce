@@ -14,6 +14,7 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<CategoryProduct> CategoryProducts { get; set; }
+    public DbSet<OrderProduct> OrderProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,8 +30,25 @@ public class DataContext : DbContext
             .HasForeignKey(cp => cp.IdProduct);
 
         modelBuilder.Entity<Category>()
-            .HasMany(c => c.categoryProducts)
+            .HasMany(c => c.CategoryProducts)
             .WithOne(cp => cp.Category)
             .HasForeignKey(cp => cp.IdCategory);
+
+        modelBuilder.Entity<OrderProduct>()
+            .HasKey(op => new { op.IdProduct, op.IdOrder });
+
+        modelBuilder.Entity<OrderProduct>()
+            .HasOne(op => op.Product)
+            .WithMany(p => p.OrderProducts)
+            .HasForeignKey(op => op.IdProduct);
+
+        modelBuilder.Entity<OrderProduct>()
+            .HasOne(op => op.Order)
+            .WithMany(p => p.OrderProducts)
+            .HasForeignKey(op => op.IdOrder);
+
+        modelBuilder.Entity<OrderProduct>()
+            .Property(op => op.Quantity)
+            .IsRequired();
     }
 }

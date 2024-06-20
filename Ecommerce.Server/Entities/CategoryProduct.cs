@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ecommerce.Server.Entities;
 
 public class CategoryProduct
 {
-    [ForeignKey("Product")] public int IdProduct { get; set; }
+    [Key, Column(Order = 0), ForeignKey("Product")] public int IdProduct { get; set; }
     public Product Product { get; set; }
-    [ForeignKey("Category")] public int IdCategory { get; set; }
+    [Key, Column(Order = 1), ForeignKey("Category")] public int IdCategory { get; set; }
     public Category Category { get; set; }
 }

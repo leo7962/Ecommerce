@@ -8,24 +8,25 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Product, ProductDTO>()
-            .ForMember(dto => dto.IdCategories,
-                opt => opt.MapFrom(src => src.CategoryProducts.Select(cp => cp.IdCategory)));
-        CreateMap<ProductDTO, Product>();
-        CreateMap<Category, CategoryDTO>()
-            .ForMember(dto => dto.IdProducts,
-                opt => opt.MapFrom(src => src.categoryProducts.Select(cp => cp.IdProduct)));
-        CreateMap<CategoryDTO, Category>();
-        CreateMap<User, UserDTO>()
-            .ForMember(dto => dto.IdOrders, opt => opt.MapFrom(src => src.Orders.Select(o => o.Id).ToList()));
-        CreateMap<UserDTO, User>();
-        CreateMap<Order, OrderDTO>();
-        CreateMap<OrderDTO, Order>()
-            .ForMember(dto => dto.DetailOrders, opt => opt.MapFrom(src => src.detailOrders));
-        CreateMap<DetailOrder, DetailOrderDTO>();
-        CreateMap<Product, CategoryDTO>()
-            .ForMember(dto => dto.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dto => dto.Name, opt => opt.MapFrom(src => src.Name));
-        CreateMap<User, UserDTO>().ReverseMap();
+        //Mapping of Product
+        CreateMap<Product, ProductDTO>()            
+            .ForMember(dto => dto.IdProduct, opt => opt.MapFrom(src => src.IdProduct));
+
+        //Mapping of Category
+        CreateMap<Category, CategoryDTO>();           
+
+        //Mapping order
+        CreateMap<Order, OrderDTO>()         
+            .ForMember(dto => dto.Products, opt => opt.MapFrom(src => src.OrderProducts.Select(op => new {op.IdProduct, op.Quantity})));
+
+        //Mapping order to orderProduct
+        CreateMap<OrderProduct, OrderProductDTO>()
+            .ForMember(dto => dto.IdProduct, opt => opt.MapFrom(src => src.IdProduct))
+            .ForMember(dto => dto.Quantity, opt => opt.MapFrom(src => src.Quantity));
+
+        //Mapping User
+
+        CreateMap<User, UserDTO>()            
+            .ForMember(dto => dto.IdOrders, opt => opt.MapFrom(src => src.Orders.Select(o => o.IdOrder)));
     }
 }

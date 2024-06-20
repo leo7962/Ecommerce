@@ -39,16 +39,29 @@ public class ProductService : IProductService
 
     public async Task<ProductDTO> CreateProductAsync(ProductDTO productDto)
     {
-        var product = mapper.Map<Product>(productDto);
-        await context.Products.AddAsync(product);
-        await context.SaveChangesAsync();
-        return mapper.Map<ProductDTO>(product);
+        try
+        {
+            var product = mapper.Map<Product>(productDto);
+            await context.Products.AddAsync(product);
+            await context.SaveChangesAsync();
+            return mapper.Map<ProductDTO>(product);
+        }
+        catch (DbUpdateException)
+        {
+
+            throw new Exception("An error occurred while saving the product in the database.");
+        }
+        catch (Exception)
+        {
+            throw new Exception("An unexpected error has occurred.");
+        }
+
     }
 
     public async Task DeleteProductAsync(int id)
     {
         var product = await context.Products.FindAsync(id);
-        if (product == null)
+        if (product != null)
         {
             context.Products.Remove(product);
             await context.SaveChangesAsync();
@@ -60,6 +73,8 @@ public class ProductService : IProductService
         var products = await context.Products
             .Include(p => p.CategoryProducts)
             .ThenInclude(cp => cp.Category)
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Order)
             .ToListAsync();
         return mapper.Map<IEnumerable<ProductDTO>>(products);
     }
@@ -69,7 +84,9 @@ public class ProductService : IProductService
         var product = await context.Products
             .Include(p => p.CategoryProducts)
             .ThenInclude(cp => cp.Category)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Order)
+            .FirstOrDefaultAsync(p => p.IdProduct == id);
         return mapper.Map<ProductDTO>(product);
     }
 

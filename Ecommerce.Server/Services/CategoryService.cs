@@ -29,7 +29,7 @@ public class CategoryService : ICategoryService
     public async Task DeleteCategoryAsync(int id)
     {
         var category = await context.Categories.FindAsync(id);
-        if (category == null)
+        if (category != null)
         {
             context.Categories.Remove(category);
             await context.SaveChangesAsync();
@@ -39,18 +39,25 @@ public class CategoryService : ICategoryService
     public async Task<IEnumerable<CategoryDTO>> GetAllCategoriesAsync()
     {
         var categories = await context.Categories
-            .Include(p => p.categoryProducts)
-            .ThenInclude(cp => cp.Product)
-            .ToListAsync();
+            .Select(c => new CategoryDTO
+            {
+                IdCategory = c.IdCategory,
+                Name = c.Name             
+            }).ToListAsync();
+
         return mapper.Map<IEnumerable<CategoryDTO>>(categories);
     }
 
     public async Task<CategoryDTO> GetCategoryByIdAsync(int id)
     {
         var category = await context.Categories
-            .Include(p => p.categoryProducts)
-            .ThenInclude(cp => cp.Product)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .Where(c => c.IdCategory == id)
+            .Select(c => new CategoryDTO
+            {
+                IdCategory = c.IdCategory,
+                Name= c.Name                
+            }).FirstOrDefaultAsync();
+
         return mapper.Map<CategoryDTO>(category);
     }
 

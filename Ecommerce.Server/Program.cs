@@ -1,4 +1,3 @@
-using System.Text;
 using Ecommerce.Server.Data;
 using Ecommerce.Server.Helpers;
 using Ecommerce.Server.Interfaces;
@@ -6,6 +5,8 @@ using Ecommerce.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +32,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    opt.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+});
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
