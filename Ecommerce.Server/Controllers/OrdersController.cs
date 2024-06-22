@@ -31,12 +31,12 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<OrderDTO>> PostOrder(OrderDTO orderDTO)
+    public async Task<ActionResult> PostOrder([FromBody] OrderProductDTO orderDTO)
     {
         try
         {
-            var ordercreated = await orderService.CreateOrUpdateOrderAsync(orderDTO);
-            return CreatedAtAction(nameof(GetOrder), new { id = ordercreated.IdOrder }, ordercreated);
+            var ordercreated = await orderService.CreateOrderAsync(orderDTO);
+            return Ok(ordercreated);
         }
         catch (DbUpdateException ex)
         {
@@ -44,6 +44,7 @@ public class OrdersController : ControllerBase
         }
         catch (Exception ex)
         {
+            BadRequest(new { message = "There is not enough stock to make the purchase." });
             return StatusCode(500, "An unexpected error has occurred." + " " + ex.Message);
         }
     }

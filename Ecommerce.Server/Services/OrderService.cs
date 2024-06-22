@@ -18,17 +18,48 @@ public class OrderService : IOrderService
         this.mapper = mapper;
     }
 
-    public async Task<OrderDTO> CreateOrUpdateOrderAsync(OrderDTO orderDTO, bool addProducts = false)
+    public async Task<OrderProductDTO> CreateOrderAsync(OrderProductDTO orderDTO)
     {
-        // Create or map the order depending on 'addProducts'.
-        var order = addProducts ? CreateOrderWithProducts(orderDTO) : mapper.Map<Order>(orderDTO);
+        try
+        {
+            var product = await context.Products.FindAsync(orderDTO.IdProduct);
+            if (product == null)
+            {
+                throw new Exception($"The product with the ID: {orderDTO.IdProduct} does not exist.");
+            }
 
-        // Add the command to the context and save the changes.
-        await context.Orders.AddAsync(order);
-        await context.SaveChangesAsync();
+            if (product.Quantity < orderDTO.Quantity)
+            {
+                throw new Exception($"Not enough stock for the product {orderDTO.IdProduct}");
+            }
+            var idUser = 1002;
+            var order = new Order
+            {
+                IdUser = idUser
+            };
+            await context.AddAsync(order);
+            await context.SaveChangesAsync();
 
-        // Map and return the DTO of the order.
-        return mapper.Map<OrderDTO>(order);
+            var orderProduct = new OrderProduct
+            {
+                IdOrder = order.IdOrder,
+                IdProduct = orderDTO.IdProduct,
+                Quantity = orderDTO.Quantity
+            };
+            context.OrderProducts.Add(orderProduct);
+
+            product.Quantity -= orderDTO.Quantity;
+            context.Products.Update(product);
+
+            await context.SaveChangesAsync();
+
+            return mapper.Map<OrderProductDTO>(orderProduct);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
     }
 
     public async Task DeleteOrderAsync(int id)
@@ -50,6 +81,7 @@ public class OrderService : IOrderService
             .Select(o => new OrderDTO
             {
                 IdOrder = o.IdOrder,
+                IdUser = o.IdUser,
                 // Assign other necessary properties
                 Products = o.OrderProducts.Select(op => new ProductDTO
                 {
@@ -57,6 +89,7 @@ public class OrderService : IOrderService
                     Name = op.Product.Name,
                     Description = op.Product.Description,
                     Price = op.Product.Price,
+                    Quantity = op.Quantity,
                     Categories = op.Product.CategoryProducts.Select(cp => new CategoryDTO
                     {
                         IdCategory = cp.Category.IdCategory,

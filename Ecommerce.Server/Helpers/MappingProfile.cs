@@ -17,8 +17,14 @@ public class MappingProfile : Profile
         //Mapping of Category
         CreateMap<Category, CategoryDTO>().ReverseMap();
 
+        //Mapping of product with Order
+        CreateMap<Product, OrderProduct>()
+            .ForMember(dest => dest.IdProduct, opt => opt.MapFrom(src => src.IdProduct))
+            .ReverseMap();        
+
         //Mapping order
         CreateMap<Order, OrderDTO>()
+            .ForMember(dto => dto.IdUser, opt => opt.MapFrom(src => src.IdUser))
             .ForMember(dto => dto.Products,
                 opt => opt.MapFrom(src => src.OrderProducts.Select(op => new { op.IdProduct, op.Quantity }))).ReverseMap();
 
@@ -26,6 +32,10 @@ public class MappingProfile : Profile
         CreateMap<OrderProduct, OrderProductDTO>()
             .ForMember(dto => dto.IdProduct, opt => opt.MapFrom(src => src.IdProduct))
             .ForMember(dto => dto.Quantity, opt => opt.MapFrom(src => src.Quantity)).ReverseMap();
+
+        //Mapping orderProduct to productDTO
+        CreateMap<OrderProduct, ProductDTO>()
+            .ForMember(dto => dto.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
         //Mapping User
 
