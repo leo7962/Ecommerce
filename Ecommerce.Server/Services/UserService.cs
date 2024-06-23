@@ -3,28 +3,24 @@ using Ecommerce.Server.Data;
 using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Entities;
 using Ecommerce.Server.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Services;
 
 public class UserService : IUserService
 {
+    private readonly UserManager<IdentityUser> userManager;
+    private readonly IConfiguration configuration;
     private readonly DataContext context;
     private readonly IMapper mapper;
 
-    public UserService(DataContext context, IMapper mapper)
+    public UserService(UserManager<IdentityUser> userManager, IConfiguration configuration, DataContext context, IMapper mapper)
     {
+        this.userManager = userManager;
+        this.configuration = configuration;
         this.context = context;
         this.mapper = mapper;
-    }
-
-    public async Task<UserDTO> CreateUserAsync(UserDTO userDTO)
-    {
-        var user = mapper.Map<User>(userDTO);
-        //user.Password = HashPassword(userDTO.Password);
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
-        return mapper.Map<UserDTO>(userDTO);
     }
 
     public async Task DeleteUserAsync(int id)
