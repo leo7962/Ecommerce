@@ -1,6 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import ProductCard from './ProductCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProducts } from '../reducers/productsReducer';
+import axios  from 'axios';
 
 interface Product {
     id: string;   
@@ -15,9 +18,23 @@ const ProductList: FC<ProductListProps> = ({ products, addToCart }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
+    const dispatch = useDispatch();
+    const productsDto = useSelector((state) => state.products);
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
+
+    useEffect(() => {
+        axios.get('/api/productsDto')
+            .then(response => {
+                // Aquí obtienes los productos desde el backend
+                const getProducts = response.data;
+                dispatch(setProducts(getProducts)); // Actualiza el estado con los productos
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, []);
 
     const paginatedProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
