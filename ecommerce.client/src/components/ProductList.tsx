@@ -6,15 +6,20 @@ import { setProducts } from '../reducers/productsReducer';
 import axios  from 'axios';
 
 interface Product {
-    id: string;   
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+    image: string;   
 }
 
 interface ProductListProps {
     products: Product[];
+    setProducts(value: Product[] | ((prevVar: Product[]) => Product[])) : void;
     addToCart: (product: Product) => void;
 }
 
-const ProductList: FC<ProductListProps> = ({ products, addToCart }) => {
+const ProductList: FC<ProductListProps> = ({ products, setProducts, addToCart }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
@@ -25,11 +30,10 @@ const ProductList: FC<ProductListProps> = ({ products, addToCart }) => {
     };
 
     useEffect(() => {
-        axios.get('/api/productsDto')
-            .then(response => {
-                // Aquí obtienes los productos desde el backend
+        axios.get('http://localhost:5203/api/Products')
+            .then(response => {                
                 const getProducts = response.data;
-                dispatch(setProducts(getProducts)); // Actualiza el estado con los productos
+                dispatch(setProducts(getProducts)); 
             })
             .catch(error => {
                 console.error('Error:', error);

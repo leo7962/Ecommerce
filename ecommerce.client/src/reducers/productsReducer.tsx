@@ -13,8 +13,7 @@ const productsSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        setProducts: (state, action) => {
-            // Actualiza el estado con los productos recibidos desde el backend
+        setProducts: (state, action) => {            
             return action.payload;
         },
     },
