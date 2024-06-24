@@ -1,20 +1,34 @@
 # Ecommerce
 
-## Descripción
+## Description
 
-Breve descripción de tu proyecto Ecommerce. ¿Qué hace? ¿Por qué es útil? ¿Qué problemas resuelve?
+Ecommerce is a project whose purpose is to show a technical and practical evaluation that helps to have an overview of the best of my experience as a developer
 
-## Comenzando
+## Beginning
 
-### Dependencias
+### Prerequisites
 
-- Lista de cualquier software, biblioteca o herramienta que sea necesaria.
-- Por ejemplo: Node.js, .NET, Python 3.6, etc.
+To run this project, you will need to install the following dependencies on your system:
 
-### Instalación
+1. **.NET Core SDK**: You will need the .NET Core SDK to develop .NET applications.
+2. **Node.js and npm**: Node.js is a runtime environment for JavaScript and npm is a package manager for Node.js. Both are necessary to work with React.
+3. **TypeScript**: TypeScript is a superset of JavaScript that adds static typing and class-based objects. You will need to install it to work with TypeScript in React.
+4. **React and React-DOM**: These are the React libraries. React is the main library, while ReactDOM is used to manipulate the DOM in web applications.
+5. **Visual Studio or VS Code**: You will need a development environment like Visual Studio or VS Code.
+6. **NuGet Packages**: NuGet packages are code packages that you can add to your .NET projects from the NuGet registry.
 
-- Cómo instalar el proyecto/dependencias.
-- Pasos para la instalación.
+### Installation
+
+To install the project dependencies, you can use the following commands:
+
+```bash
+# Install .NET dependencies
+dotnet restore
+
+# Install Node.js dependencies
+npm install
+
+´´´
 
 ### Configuración inicial
 
