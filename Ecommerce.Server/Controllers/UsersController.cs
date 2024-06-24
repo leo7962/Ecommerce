@@ -1,7 +1,6 @@
 ﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Helpers;
 using Ecommerce.Server.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,25 +13,23 @@ namespace Ecommerce.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class UsersController : ControllerBase
 {
-    private readonly IJwtService jwtService;
+    private readonly SignInManager<IdentityUser> signInManager;
     private readonly UserManager<IdentityUser> userManager;
     private readonly IConfiguration configuration;
     private readonly IUserService userService;
 
-    public UsersController(UserManager<IdentityUser> userManager, IConfiguration configuration, IUserService userService, IJwtService jwtService)
+    public UsersController(UserManager<IdentityUser> userManager, IConfiguration configuration, IUserService userService, SignInManager<IdentityUser> signInManager)
     {
         this.userManager = userManager;
         this.configuration = configuration;
         this.userService = userService;
-        this.jwtService = jwtService;
+        this.signInManager = signInManager;
     }
 
     [HttpGet]
-    [Authorize]
-    [AllowAnonymous]
+    [Authorize]    
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
     {
         var users = await userService.GetAllUsersAsync();
@@ -64,7 +61,7 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("register", Name ="registerUser")]
+    [HttpPost("register")] //api/Users/register
     public async Task<ActionResult<AuthenticationResponse>> Register(UserCredential userCredential)
     {
         var user = new IdentityUser { UserName = userCredential.Email, Email = userCredential.Email };
@@ -75,11 +72,27 @@ public class UsersController : ControllerBase
         return BadRequest(result.Errors);
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<AuthenticationResponse>> Login(UserCredential userCredential)
+    {
+        var result = await signInManager.PasswordSignInAsync(userCredential.Email, userCredential.Password, isPersistent: false, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            return await BuildToken(userCredential);
+        }
+        else
+        {
+            return BadRequest("Bad login ");
+        }
+    }
+
     private async Task<AuthenticationResponse> BuildToken(UserCredential userCredential)
     {
         var claim = new List<Claim>
         {
-            new("email", userCredential.Email)
+            new("email", userCredential.Email),
+            new("userName", userCredential.UserName)
         };
 
         var user = await userManager.FindByEmailAsync(userCredential.Email);
@@ -88,9 +101,9 @@ public class UsersController : ControllerBase
         claim.AddRange(claimsDb);
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
-        var expiration = DateTime.UtcNow.AddMinutes(30);
+        var expiration = DateTime.UtcNow.AddDays(1);
 
         var securityToken = new JwtSecurityToken(null, null, claim, expires: expiration,
             signingCredentials: creds);

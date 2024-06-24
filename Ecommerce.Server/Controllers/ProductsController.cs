@@ -1,5 +1,7 @@
 ﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,7 @@ namespace Ecommerce.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ProductsController : ControllerBase
 {
     private readonly IProductService productService;
@@ -17,6 +20,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(int pageNumber = 1, int pageSize = 10)
     {
         var products = await productService.GetAllProductAsync(pageNumber, pageSize);

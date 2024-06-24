@@ -1,5 +1,7 @@
 ﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,7 @@ namespace Ecommerce.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class OrdersController : ControllerBase
 {
     private readonly IOrderService orderService;
@@ -17,6 +20,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders()
     {
         var orders = await orderService.GetAllOrdersAsync();
@@ -31,6 +35,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult> PostOrder([FromBody] OrderProductDTO orderDTO)
     {
         try

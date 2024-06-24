@@ -1,11 +1,14 @@
 ﻿using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryService categoryService;
@@ -16,6 +19,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategory()
     {
         var categories = await categoryService.GetAllCategoriesAsync();
