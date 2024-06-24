@@ -1,19 +1,18 @@
-﻿namespace Ecommerce.Server.Helpers
+﻿namespace Ecommerce.Server.Helpers;
+
+public class PaginatedList<T> : List<T>
 {
-    public class PaginatedList<T> : List<T>
+    public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
     {
-        public int PageIndex { get; private set; }
-        public int TotalPages { get; private set; }
+        PageIndex = pageIndex;
+        TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
-        {
-            PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            AddRange(items);
-        }
-
-        public bool HasPreviousPage => PageIndex > 1;
-        public bool HasNextPage => PageIndex < TotalPages;
+        AddRange(items);
     }
+
+    public int PageIndex { get; }
+    public int TotalPages { get; }
+
+    public bool HasPreviousPage => PageIndex > 1;
+    public bool HasNextPage => PageIndex < TotalPages;
 }

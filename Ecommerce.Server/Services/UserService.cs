@@ -10,12 +10,13 @@ namespace Ecommerce.Server.Services;
 
 public class UserService : IUserService
 {
-    private readonly UserManager<IdentityUser> userManager;
     private readonly IConfiguration configuration;
     private readonly DataContext context;
     private readonly IMapper mapper;
+    private readonly UserManager<IdentityUser> userManager;
 
-    public UserService(UserManager<IdentityUser> userManager, IConfiguration configuration, DataContext context, IMapper mapper)
+    public UserService(UserManager<IdentityUser> userManager, IConfiguration configuration, DataContext context,
+        IMapper mapper)
     {
         this.userManager = userManager;
         this.configuration = configuration;

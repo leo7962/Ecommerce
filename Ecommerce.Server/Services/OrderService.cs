@@ -23,15 +23,10 @@ public class OrderService : IOrderService
         try
         {
             var product = await context.Products.FindAsync(orderDTO.IdProduct);
-            if (product == null)
-            {
-                throw new Exception($"The product with the ID: {orderDTO.IdProduct} does not exist.");
-            }
+            if (product == null) throw new Exception($"The product with the ID: {orderDTO.IdProduct} does not exist.");
 
             if (product.Quantity < orderDTO.Quantity)
-            {
                 throw new Exception($"Not enough stock for the product {orderDTO.IdProduct}");
-            }
             var idUser = 1002;
             var order = new Order
             {
@@ -59,7 +54,6 @@ public class OrderService : IOrderService
         {
             throw new Exception(ex.Message);
         }
-
     }
 
     public async Task DeleteOrderAsync(int id)

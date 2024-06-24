@@ -68,7 +68,7 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<PaginatedList<ProductDTO>> GetAllProductAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<ProductDTO>> GetAllProductAsync()
     {
         var count = await context.Products.CountAsync();
 
@@ -77,12 +77,10 @@ public class ProductService : IProductService
             .ThenInclude(cp => cp.Category)
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Order)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync();
 
         var productsDto = mapper.Map<IEnumerable<ProductDTO>>(products);
-        return new PaginatedList<ProductDTO>(productsDto.ToList(), count, pageNumber, pageSize);
+        return productsDto.ToList();
     }
 
     public async Task<ProductDTO> GetProductByIdAsync(int id)

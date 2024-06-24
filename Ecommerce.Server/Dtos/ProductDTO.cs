@@ -7,5 +7,5 @@ public class ProductDTO
     public string Description { get; set; }
     public decimal Price { get; set; }
     public int Quantity { get; set; }
-    public List<CategoryDTO> Categories { get; set; }    
+    public List<CategoryDTO> Categories { get; set; }
 }

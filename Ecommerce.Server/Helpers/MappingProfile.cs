@@ -20,13 +20,14 @@ public class MappingProfile : Profile
         //Mapping of product with Order
         CreateMap<Product, OrderProduct>()
             .ForMember(dest => dest.IdProduct, opt => opt.MapFrom(src => src.IdProduct))
-            .ReverseMap();        
+            .ReverseMap();
 
         //Mapping order
         CreateMap<Order, OrderDTO>()
             .ForMember(dto => dto.IdUser, opt => opt.MapFrom(src => src.IdUser))
             .ForMember(dto => dto.Products,
-                opt => opt.MapFrom(src => src.OrderProducts.Select(op => new { op.IdProduct, op.Quantity }))).ReverseMap();
+                opt => opt.MapFrom(src => src.OrderProducts.Select(op => new { op.IdProduct, op.Quantity })))
+            .ReverseMap();
 
         //Mapping order to orderProduct
         CreateMap<OrderProduct, OrderProductDTO>()

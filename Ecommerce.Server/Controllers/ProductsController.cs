@@ -21,9 +21,9 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(int pageNumber = 1, int pageSize = 10)
+    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
     {
-        var products = await productService.GetAllProductAsync(pageNumber, pageSize);
+        var products = await productService.GetAllProductAsync();
         return Ok(products);
     }
 
@@ -44,7 +44,6 @@ public class ProductsController : ControllerBase
         }
         catch (DbUpdateException ex)
         {
-
             return StatusCode(500, "An error occurred while saving the product in the database." + " " + ex.Message);
         }
         catch (Exception ex)

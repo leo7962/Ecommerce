@@ -5,7 +5,7 @@ namespace Ecommerce.Server.Interfaces;
 
 public interface IProductService
 {
-    Task<PaginatedList<ProductDTO>> GetAllProductAsync(int pageNumber, int pageSize);
+    Task<IEnumerable<ProductDTO>> GetAllProductAsync();
     Task<ProductDTO> GetProductByIdAsync(int id);
     Task<ProductDTO> CreateProductAsync(ProductDTO productDto);
     Task UpdateProductAsync(ProductDTO productDto);

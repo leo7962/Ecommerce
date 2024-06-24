@@ -11,7 +11,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -50,7 +49,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DataContext>()
-            .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -67,7 +66,7 @@ builder.Services.AddSwaggerGen(opt =>
         Description = "This an Api with his Enpoints and DTOS",
         Contact = new OpenApiContact
         {
-            Name = "Leonardo Fabi·n Hern·ndez PeÒa",
+            Name = "Leonardo Fabi√°n Hern√°ndez Pe√±a",
             Email = "ingenieroleonardo@outlook.com",
             Url = new Uri("https://github.com/leo7962")
         },

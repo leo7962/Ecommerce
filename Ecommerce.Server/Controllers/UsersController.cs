@@ -1,13 +1,13 @@
-﻿using Ecommerce.Server.Dtos;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Helpers;
 using Ecommerce.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Ecommerce.Server.Controllers;
 
@@ -15,12 +15,13 @@ namespace Ecommerce.Server.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
+    private readonly IConfiguration configuration;
     private readonly SignInManager<IdentityUser> signInManager;
     private readonly UserManager<IdentityUser> userManager;
-    private readonly IConfiguration configuration;
     private readonly IUserService userService;
 
-    public UsersController(UserManager<IdentityUser> userManager, IConfiguration configuration, IUserService userService, SignInManager<IdentityUser> signInManager)
+    public UsersController(UserManager<IdentityUser> userManager, IConfiguration configuration,
+        IUserService userService, SignInManager<IdentityUser> signInManager)
     {
         this.userManager = userManager;
         this.configuration = configuration;
@@ -29,7 +30,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]    
+    [Authorize]
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
     {
         var users = await userService.GetAllUsersAsync();
@@ -75,16 +76,12 @@ public class UsersController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthenticationResponse>> Login(UserCredential userCredential)
     {
-        var result = await signInManager.PasswordSignInAsync(userCredential.Email, userCredential.Password, isPersistent: false, lockoutOnFailure: false);
+        var result =
+            await signInManager.PasswordSignInAsync(userCredential.Email, userCredential.Password, false, false);
 
         if (result.Succeeded)
-        {
             return await BuildToken(userCredential);
-        }
-        else
-        {
-            return BadRequest("Bad login ");
-        }
+        return BadRequest("Bad login ");
     }
 
     private async Task<AuthenticationResponse> BuildToken(UserCredential userCredential)
