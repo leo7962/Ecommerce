@@ -1,56 +1,87 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from 'react';
+import {
+    BrowserRouter as Router,
+    Route,
+    Routes
+} from 'react-router-dom';
+import NavBarCom from './components/NavBar';
+import ProductList from './components/ProductList';
+import Cart from './components/Cart';
+import Login from './components/Login';
+import Register from './components/Register';
+import { Provider } from 'react-redux';
+import { store } from './store/Store';
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+// Define the type of the product
+interface Product {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
 }
 
-function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+const App = () => {
+    const [products, setProducts] = useState<Product[]>([
+        { id: 1, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 2, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 3, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 4, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 5, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 6, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 7, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 8, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 9, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 10, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 11, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 12, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 13, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 14, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 15, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        { id: 16, name: 'Product 1', price: 100, image: 'https://via.placeholder.com/150' },
+        // Rest of the products...
+    ]);
+
+    const [cartItems, setCartItems] = useState<Product[]>([]);
+
+    const addToCart = (product: Product) => {
+        setCartItems([...cartItems, product]);
+    };
+
+    const removeFromCart = (product: Product) => {
+        setCartItems(cartItems.filter(item => item !== product));
+    };
 
     useEffect(() => {
-        populateWeatherData();
-    }, []);
+        // request bd
+    }, [])
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+    const checkout = () => {
+        alert('Proceeding to checkout!');
+        setCartItems([]);
+    };
+
+    const handleLogin = (email: string, password: string) => {
+        // Here you can handle the login
+    };
+
+    const handleRegister = (username: string, email: string, password: string) => {
+        // Here you can handle the registration
+    };
 
     return (
-        <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
+        <Provider store={store}>
+        <Router>            
+            <NavBarCom />
+            <Routes>
+                <Route path="/" element={<ProductList products={products} addToCart={addToCart} />} />
+                <Route path="/cart" element={<Cart cartItems={cartItems} removeFromCart={removeFromCart} checkout={checkout} />} />
+                <Route path="/login" element={<Login onLogin={handleLogin} />} /> {/* Add the route for login */}
+                <Route path="/register" element={<Register onRegister={handleRegister} />} /> {/* Add the route for registration */}
+            </Routes>
+            </Router>
+        </Provider>
     );
-
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
-}
+};
 
 export default App;
