@@ -27,7 +27,7 @@ public class OrderService : IOrderService
 
             if (product.Quantity < orderDTO.Quantity)
                 throw new Exception($"Not enough stock for the product {orderDTO.IdProduct}");
-            var idUser = 1002;
+            var idUser = 1;
             var order = new Order
             {
                 IdUser = idUser
