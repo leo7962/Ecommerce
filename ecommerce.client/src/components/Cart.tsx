@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, ListGroup } from 'react-bootstrap';
 interface CartItem {
     name: string;
     price: number;
+    quantity: number;
 }
 
 interface CartProps {
@@ -22,6 +23,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, removeFromCart, checkout }) => {
                         <Row>
                             <Col md={6}>{item.name}</Col>
                             <Col md={2}>${item.price}</Col>
+                            <Col md={2}>Quantity: {item.quantity}</Col>
                             <Col md={2}>
                                 <Button variant="danger" onClick={() => removeFromCart(item)}>Remove</Button>
                             </Col>
