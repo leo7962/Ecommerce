@@ -2,7 +2,6 @@
 using Ecommerce.Server.Data;
 using Ecommerce.Server.Dtos;
 using Ecommerce.Server.Entities;
-using Ecommerce.Server.Helpers;
 using Ecommerce.Server.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
